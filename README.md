@@ -15,14 +15,14 @@ Example
 
 Given:
 
-```
+``` js
 var FSKVClient = require('fskv-client').FSKVClient;
 var db = new FSKVClient('http://localhost:9000');
 ```
 
 ### `PUT`
 
-```
+``` js
 db.put('my key', 'my value', function(err, res, body) {
   console.log(res.statusCode);
   // => 200
@@ -44,7 +44,7 @@ db.get('my key', function(err, res, body) {
 
 ### `DELETE`
 
-```
+``` js
 db.del('my key', function(err, res, body) {
   console.log(res.statusCode);
   // => 200
