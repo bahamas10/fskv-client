@@ -1,0 +1,16 @@
+{
+  "name": "fskv-client",
+  "version": "0.0.0",
+  "description": "A Node fskv client",
+  "author": "Dave Eddy <dave@daveeddy.com> (http://www.daveeddy.com)",
+  "main": "./fskv-client.js",
+  "scripts": {
+    "test": "for f in test/*; do echo \"\n== $f ==\"; node \"$f\" || exit 1; done; echo Passed; exit 0"
+  },
+  "repository": "git://github.com/bahamas10/fskv-client.git",
+  "homepage": "https://github.com/bahamas10/fskv-client",
+  "license": "MIT",
+  "dependencies": {
+    "request": "~2.21.0"
+  }
+}
