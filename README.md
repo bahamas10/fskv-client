@@ -64,6 +64,7 @@ Execute a `GET` request for the given `key`.
 - `cb`: An optional callback.  If not callback is supplied, the request is returned as an event emitter that can be piped
 
 ``` js
+// EventEmitter Example
 db.get('my key').pipe(process.stdout);
 ```
 
@@ -80,6 +81,7 @@ Execute a `PUT` on the database with the given `key`.
 - `cb`: An optional callback
 
 ``` js
+// EventEmitter Example
 var fs = require('fs');
 var rs = fs.createReadStream('/etc/passwd');
 
