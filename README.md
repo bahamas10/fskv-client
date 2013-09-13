@@ -84,9 +84,22 @@ Execute a `PUT` on the database with the given `key`.
 // EventEmitter Example
 var fs = require('fs');
 var rs = fs.createReadStream('/etc/passwd');
+var put = db.put(key);
+
+put.on('error', function(e) {
+  console.error(e.message);
+});
+rs.pipe(put);
+```
+
+``` js
+// EventEmitter Example whith a callback
+var fs = require('fs');
+var rs = fs.createReadStream('/etc/passwd');
 
 var req = db.put(key, function(err, res, body) {
-  if (err) throw err;
+  console.log(res.statusCode);
+  // => 200
 });
 
 rs.pipe(req);
