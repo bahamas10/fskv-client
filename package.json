@@ -1,6 +1,6 @@
 {
   "name": "fskv-client",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A Node fskv client",
   "author": "Dave Eddy <dave@daveeddy.com> (http://www.daveeddy.com)",
   "main": "./fskv-client.js",
