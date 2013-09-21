@@ -1,7 +1,10 @@
 var EventEmitter = require('events').EventEmitter;
 var url = require('url');
+var util = require('util');
 
 var request = require('request');
+
+var USERAGENT = util.format('fskv-client (v%s)', require('./package.json').version);
 
 module.exports = FSKVClient;
 module.exports.FSKVClient = FSKVClient;
@@ -9,7 +12,8 @@ module.exports.FSKVClient = FSKVClient;
 /**
  * Pass in a URI
  */
-function FSKVClient(s) {
+function FSKVClient(s, useragent) {
+  this.useragent = useragent || USERAGENT;
   this.uri = s;
 }
 
@@ -46,14 +50,28 @@ FSKVClient.prototype.put = function put(key, value, opts, cb) {
     cb = opts;
     opts = {};
   }
-  return this._action(key, 'PUT', {value: value, opts: opts}, cb);
+  return this._action(key, 'PUT', {json: true, value: value, opts: opts}, cb);
 };
 
 /**
  * DELETE data for a key
  */
 FSKVClient.prototype.del = function del(key, cb) {
-  return this._action(key, 'DELETE', {}, cb);
+  return this._action(key, 'DELETE', {json: true}, cb);
+};
+
+/**
+ * ping the server
+ */
+FSKVClient.prototype.ping = function ping(cb) {
+  return this._request('/ping', 'GET', {}, cb);
+};
+
+/**
+ * get server stats
+ */
+FSKVClient.prototype.stats = function stats(cb) {
+  return this._request('/stats', 'GET', {json: true}, cb);
 };
 
 // the heavy lifting is done here
@@ -76,26 +94,34 @@ FSKVClient.prototype._action = function _action(key, method, opts, cb) {
     return;
   }
 
-  var uri = this.uri + '/data/' + encodeURIComponent(key);
+  var uri = '/data/' + encodeURIComponent(key);
 
+  return this._request(uri, method, opts, cb);
+}
+
+// the request is made here
+FSKVClient.prototype._request = function _request(uri, method, opts, cb) {
+  uri = this.uri + uri;
   var reqobj = {
     method: method,
     uri: uri,
-    headers: {}
+    headers: {
+      'User-Agent': this.useragent
+    }
   };
 
+  if (opts.json)
+    reqobj.json = true;
   switch (method) {
     case 'HEAD':
     case 'GET':
-      reqobj.headers = {
-        'If-None-Match': opts.etag
-      }
+      reqobj.headers['If-None-Match'] = opts.etag;
       break;
     case 'PUT':
     case 'DELETE':
       reqobj.qs = opts.opts;
-      reqobj.json = true;
-      if (opts.value !== undefined) reqobj.body = opts.value;
+      if (opts.value !== undefined)
+        reqobj.body = opts.value;
       break;
   }
 

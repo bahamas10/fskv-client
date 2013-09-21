@@ -56,6 +56,17 @@ db.del('my key', function(err, res, body) {
 Functions
 ---------
 
+### `new FSKVClient(uri, [useragent])`
+
+Create a new database object that can be used to get and put data
+
+`User-Agent` is optional and defaults to `fskv-client (vX.Y.Z)` with the version number
+
+---
+
+All callbacks given below will be fired as `function(err, res, body)`, which is passed directly
+from the `request` module
+
 ### `db.get(key, [etag], [cb])`
 
 Execute a `GET` request for the given `key`.
@@ -110,6 +121,14 @@ rs.pipe(req);
 Execute a `DELETE` on the database with the given `key`.
 
 - `cb`: An optional callback
+
+### `db.ping(cb)`
+
+Ping the server, you can test that `res.statusCode === 200` and `body === 'pong\n'`
+
+### `db.stats(cb)`
+
+`body` will be set to a parsed object that represents the servers stats
 
 License
 -------
